@@ -3,9 +3,8 @@ package org.example;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -53,6 +52,49 @@ public class Main {
     public void should_return_list_as_insepect_when_given_n_and_k() {
         List<List<Integer>> inspect_res = new ArrayList<>(Arrays.asList(Arrays.asList(1, 2), Arrays.asList(1, 3), Arrays.asList(1, 4), Arrays.asList(2, 3), Arrays.asList(2, 4), Arrays.asList(3, 4)));
         List<List<Integer>> result = combine(4, 2);
+
+        Assert.assertEquals(inspect_res, result);
+    }
+
+    List<String> letterCombinationsRet = new ArrayList<>();
+    List<Character> letterCombinationsPath = new ArrayList<>();
+    HashMap<Character, String> mapToLitter = new HashMap<Character, String>() {
+        {
+            put('2', "abc");
+            put('3', "def");
+            put('4', "ghi");
+            put('5', "jkl");
+            put('6', "mno");
+            put('7', "pqrs");
+            put('8', "tuv");
+            put('9', "wxyz");
+        }
+    };
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.isEmpty()) {
+            return Collections.emptyList();
+        }
+        getLetterCombinations(digits.toCharArray(), 0);
+        return letterCombinationsRet;
+    }
+
+    public void getLetterCombinations(char[] digits, int i) {
+        if (letterCombinationsPath.size() == digits.length) {
+            letterCombinationsRet.add(letterCombinationsPath.stream().map(String::valueOf).collect(Collectors.joining()));
+            return;
+        }
+        for (int j = 0; j < mapToLitter.get(digits[i]).length(); j++) {
+            letterCombinationsPath.add(mapToLitter.get(digits[i]).charAt(j));
+            getLetterCombinations(digits, i + 1);
+            letterCombinationsPath.remove(letterCombinationsPath.size() - 1);
+        }
+    }
+
+    @Test
+    public void should_return_list_as_insepect_when_given_digits() {
+        List<String> inspect_res = Arrays.asList("ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf");
+        List<String> result = letterCombinations("23");
 
         Assert.assertEquals(inspect_res, result);
     }
