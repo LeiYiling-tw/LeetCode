@@ -100,7 +100,44 @@ public class Main {
     }
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        getcombinationSum(candidates, target, 0);
         return ret;
+    }
+
+    public void getcombinationSum(int[] candidates, int target, int j) {
+        if (sumPath(path) > target) {
+            return;
+        }
+        if (sumPath(path) == target) {
+            ret.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = j; i < candidates.length; i++) {
+            path.add(candidates[i]);
+            getcombinationSum(candidates, target, i);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    public int sumPath(List<Integer> path) {
+        int sum = 0;
+        for (int i = 0; i < path.size(); i++) {
+            sum += path.get(i);
+        }
+        return sum;
+    }
+
+    /*
+    * 输入: candidates = [2,3,5], target = 8
+        输出: [[2,2,2,2],[2,3,3],[3,5]]
+    * */
+    @Test
+    public void should_return_list_as_insepect_when_given_targe_and_candidates() {
+        int[] candidates = {2, 3, 5};
+        List<List<Integer>> inspect_res = Arrays.asList(Arrays.asList(2, 2, 2, 2), Arrays.asList(2, 3, 3), Arrays.asList(3, 5));
+        List<List<Integer>> result = combinationSum(candidates, 8);
+
+        Assert.assertEquals(inspect_res, result);
     }
 
 }
