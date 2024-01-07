@@ -196,9 +196,61 @@ public class Main {
     }
 
 
+    List<List<String>> partitionRet = new ArrayList<>();
+    List<String> partitionPath = new ArrayList<>();
+
     // 分割回文串
+    //输入：s = "aab"
+    //输出：[["a","a","b"],["aa","b"]]
+    @Test
+    public void should_return_list_as_insepect_when_given_s() {
+        int[] candidates = {10, 1, 2, 7, 6, 1, 5};
+        List<List<String>> inspect_res = Arrays.asList(Arrays.asList("a", "a", "b"), Arrays.asList("aa", "b"));
+        List<List<String>> result = partition("aab");
+
+        Assert.assertEquals(inspect_res, result);
+    }
 
     public List<List<String>> partition(String s) {
+        getPartition(s, 0);
+        return partitionRet;
+    }
+
+    private void getPartition(String s, int i) {
+        if (i >= 1 && !isPalindrome(partitionPath.get(partitionPath.size() - 1))) {
+            return;
+        }
+        if (i >= 1 && isPalindrome(partitionPath.get(partitionPath.size() - 1)) && pathSize(partitionPath) == s.length()) {
+            partitionRet.add(new ArrayList<>(partitionPath));
+            return;
+        }
+        for (int j = i; j < s.length(); j++) {
+            partitionPath.add(s.substring(i, j + 1));
+            getPartition(s, j + 1);
+            partitionPath.remove(partitionPath.size() - 1);
+        }
+    }
+
+    private int pathSize(List<String> path) {
+        if (path.isEmpty()) {
+            return 0;
+        }
+        return path.stream().mapToInt(String::length).sum();
+    }
+
+    private Boolean isPalindrome(String s) {
+        int length = s.length();
+        if (length == 1) {
+            return true;
+        }
+        int j = length - 1;
+        for (int i = 0; i < length / 2; i++) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            j--;
+        }
+        return true;
 
     }
 }
