@@ -140,4 +140,65 @@ public class Main {
         Assert.assertEquals(inspect_res, result);
     }
 
+    /*
+    * 输入: candidates = [10,1,2,7,6,1,5], target = 8,
+        输出:
+        [
+        [1,1,6],
+        [1,2,5],
+        [1,7],
+        [2,6]
+        ]
+    *
+    * */
+    Map<Integer, Boolean> used = new HashMap<Integer, Boolean>();
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        if (candidates.length >= 1) {
+            int[] array = Arrays.stream(candidates).sorted().toArray();
+            for (int i = 0; i < candidates.length; i++) {
+                used.put(i, false);
+            }
+            getcombinationSum2(array, target, 0);
+            return ret;
+        }
+        return Collections.emptyList();
+    }
+
+    public void getcombinationSum2(int[] candidates, int target, int j) {
+        if (sumPath(path) > target) {
+            return;
+        }
+        if (sumPath(path) == target) {
+            ret.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = j; i < candidates.length; i++) {
+            used.replace(i, true);
+            if (i >= 1 && !used.get(i - 1) && (candidates[i] == candidates[i - 1])) {
+                continue;
+            }
+            path.add(candidates[i]);
+            getcombinationSum2(candidates, target, i + 1);
+            path.remove(path.size() - 1);
+            used.replace(i, false);
+        }
+    }
+
+    @Test
+    public void should_return_list_as_insepect_when_given_targe_and_candidates2() {
+        int[] candidates = {10, 1, 2, 7, 6, 1, 5};
+        List<List<Integer>> inspect_res = Arrays.asList(Arrays.asList(1, 1, 6), Arrays.asList(1, 2, 5), Arrays.asList(1, 7), Arrays.asList(2, 6));
+        List<List<Integer>> result = combinationSum2(candidates, 8);
+
+        Assert.assertEquals(inspect_res, result);
+    }
+
+
+    // 分割回文串
+
+    public List<List<String>> partition(String s) {
+
+    }
 }
